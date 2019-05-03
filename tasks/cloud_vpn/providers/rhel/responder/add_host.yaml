@@ -1,14 +1,15 @@
 ---
 - name: "add responder to in-memory inventory"
   add_host:
-    name: responder
+    name: "responder"
+    groups: responders
     ansible_host: "{{ cloud_vpn_responder_public_ip }}"
     ansible_user: "{{ cloud_vpn_responder_user }}"
     ansible_connection: "{{ cloud_vpn_responder_ansible_connection }}"
     ansible_ssh_private_key_file: "{{ cloud_vpn_responder_ssh_private_key_file | default(omit) }}"
     ansible_python_interpreter: "{{ cloud_vpn_responder_python_interpreter | default(omit) }}"
 
-- name: "Wait for SSH port to become reachable"
+- name: "Wait for responder's SSH port to become reachable"
   delegate_to: responder
   wait_for_connection:
     delay: 60

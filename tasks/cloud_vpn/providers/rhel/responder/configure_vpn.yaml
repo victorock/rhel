@@ -17,7 +17,7 @@
 - name: Push Libreswan configuration file to responder
   template:
     src: "{{ lookup('first_found', params) }}"
-    dest: /etc/ipsec.d/{{ cloud_vpn_name }}.conf
+    dest: "/etc/ipsec.d/{{ cloud_vpn_name }}-{{ cloud_vpn_initiator_public_ip | to_uuid }}.conf"
   vars:
     params:
       files:
@@ -31,7 +31,7 @@
 - name: Push Libreswan secrets file to responder
   template:
     src:  "{{ lookup('first_found', params) }}"
-    dest: /etc/ipsec.d/{{ cloud_vpn_name }}.secrets
+    dest: "/etc/ipsec.d/{{ cloud_vpn_name }}-{{ cloud_vpn_initiator_public_ip | to_uuid }}.secrets"
   vars:
     params:
       files:

@@ -1,15 +1,27 @@
 ---
 - name: "add initiator to in-memory inventory"
   add_host:
-    name: initiator
+    name: "{{ inventory_hostname }}"
+    groups: initiators
+    ansible_host: "{{ hostvars[hostvar].cloud_vpn_initiator_public_ip }}"
+    ansible_user: "{{ hostvars[hostvar].cloud_vpn_initiator_user }}"
+    ansible_connection: "{{ hostvars[hostvar].cloud_vpn_initiator_ansible_connection }}"
+    ansible_ssh_private_key_file: "{{ hostvars[hostvar].cloud_vpn_initiator_ssh_private_key_file | default(omit) }}"
+    ansible_python_interpreter: "{{ hostvars[hostvar].cloud_vpn_initiator_python_interpreter | default(omit) }}"
+  loop: "{{ play_hosts }}"
+  loop_control:
+    loop_var: hostvar
+    label: "host: {{ hostvar }}"
+
+- name: "Override initiator ansible vars"
+  set_fact:
     ansible_host: "{{ cloud_vpn_initiator_public_ip }}"
     ansible_user: "{{ cloud_vpn_initiator_user }}"
     ansible_connection: "{{ cloud_vpn_initiator_ansible_connection }}"
     ansible_ssh_private_key_file: "{{ cloud_vpn_initiator_ssh_private_key_file | default(omit) }}"
     ansible_python_interpreter: "{{ cloud_vpn_initiator_python_interpreter | default(omit) }}"
 
-- name: "Wait for SSH port to become reachable"
-  delegate_to: initiator
+- name: "Wait for initiator's SSH port to become reachable"
   wait_for_connection:
     delay: 60
     timeout: 300

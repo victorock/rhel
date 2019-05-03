@@ -4,7 +4,6 @@
     name: libreswan
     update_cache: yes
   become: yes
-  delegate_to: initiator
 
 - name: Start IPSEC service
   systemd:
@@ -12,12 +11,11 @@
     state: started
     enabled: yes
   become: yes
-  delegate_to: initiator
 
 - name: Push Libreswan configuration file to initiator
   template:
     src: "{{ lookup('first_found', params) }}"
-    dest: /etc/ipsec.d/{{ cloud_vpn_name }}.conf
+    dest: "/etc/ipsec.d/{{ cloud_vpn_name }}-{{ cloud_vpn_responder_public_ip | to_uuid }}.conf"
   vars:
     params:
       files:
@@ -26,12 +24,11 @@
         - "templates/cloud_vpn/providers/rhel/initiator/{{ cloud_vpn_responder_provider }}"
         - templates/cloud_vpn/providers/rhel/initiator
   become: yes
-  delegate_to: initiator
 
 - name: Push Libreswan secrets file to initiator
   template:
     src: "{{ lookup('first_found', params) }}"
-    dest: /etc/ipsec.d/{{ cloud_vpn_name }}.secrets
+    dest: "/etc/ipsec.d/{{ cloud_vpn_name }}-{{ cloud_vpn_responder_public_ip | to_uuid }}.secrets"
   vars:
     params:
       files:
@@ -40,16 +37,13 @@
         - "templates/cloud_vpn/providers/rhel/initiator/{{ cloud_vpn_responder_provider }}"
         - templates/cloud_vpn/providers/rhel/initiator
   become: yes
-  delegate_to: initiator
 
 - name: Restart IPSEC service
   systemd:
     name: ipsec
     state: restarted
   become: yes
-  delegate_to: initiator
 
 - name: Enable IP forwarding
   command: /sbin/sysctl -w net.ipv4.ip_forward=1
   become: yes
-  delegate_to: initiator

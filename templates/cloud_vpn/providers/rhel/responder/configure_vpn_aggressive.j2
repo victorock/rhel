@@ -1,4 +1,4 @@
-conn {{ cloud_vpn_name }}
+conn {{ cloud_vpn_name }}-{{ cloud_vpn_initiator_public_ip | to_uuid }}
     left={{ cloud_vpn_responder_private_ip }}
     leftid={{ cloud_vpn_responder_public_ip }}
     right=%any

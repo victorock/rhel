@@ -2,4 +2,3 @@
 - name: Set routes to responder
   shell: "ip route | grep {{ cloud_vpn_responder_cidr }} || ip route add {{ cloud_vpn_responder_cidr }} dev {{ cloud_vpn_initiator_tunnel_interface }}"
   become: yes
-  delegate_to: initiator
