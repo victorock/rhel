@@ -1,0 +1,10 @@
+---
+- name: "generate fragment for bgp neighbor"
+  when:
+    - bgp_neighbor_address is defined
+    - bgp_neighbor_asn is defined
+  blockinfile:
+    create: "true"
+    content: "{{ lookup('template', 'neighbor.j2') }}"
+    dest: "{{ bgp_config_fragments_path }}/neighbor.cfg"
+  notify: "bgp_assemble_fragments"

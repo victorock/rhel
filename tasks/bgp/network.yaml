@@ -1,0 +1,8 @@
+---
+- name: "generate fragment for bgp network"
+  when: bgp_network is defined
+  blockinfile:
+    create: "true"
+    content: "{{ lookup('template', 'network.j2') }}"
+    dest: "{{ bgp_config_fragments_path }}/network.cfg"
+  notify: "bgp_assemble_fragments"

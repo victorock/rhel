@@ -1,0 +1,18 @@
+!
+{% include 'neighbor.j2' %}
+    address-family {{ bgp_address_family_afi }} {{ bgp_address_family_safi }}
+      {% if bgp_address_family_send_community %}
+      send-community {{ bgp_address_family_send_community }}
+      {% endif %}
+
+      {% if bgp_address_family_import_rd %}
+      route-target import {{ bgp_address_family_import_rd }}
+      {% endif %}
+
+      {% if bgp_address_family_export_rd %}
+      route-target export {{ bgp_address_family_export_rd }}
+      {% endif %}
+      
+      {% if bgp_address_family_route_reflector_client %}
+      route-reflector-client
+      {% endif %}

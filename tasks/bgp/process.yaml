@@ -1,0 +1,7 @@
+---
+- name: "generate fragment for bgp process"
+  blockinfile:
+    create: "true"
+    content: "{{ lookup('template', 'process.j2') }}"
+    dest: "{{ bgp_config_fragments_path }}/process.cfg"
+  notify: "bgp_assemble_fragments"

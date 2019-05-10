@@ -1,0 +1,22 @@
+!
+{% include 'process.j2' %}
+  neighbor {{ bgp_neighbor_address }} remote-as {{ bgp_neighbor_asn }}
+    {% if bgp_neighbor_update_source %}
+    update-source {{ bgp_neighbor_update_source }}
+    {% endif %}
+
+    {% if bgp_neighbor_timers %}
+    timers {{ bgp_neighbor_timers[0] }} {{ bgp_neighbor_timers[1] }} {{ bgp_neighbor_timers[2] }}
+    {% endif %}
+
+    {% if bgp_neighbor_soft_reconfiguration %}
+    soft-reconfiguration {{ bgp_neighbor_soft_reconfiguration }}
+    {% endif %}
+
+    {% if bgp_neighbor_activate %}
+    activate
+    {% endif %}
+
+    {% if bgp_neighbor_default_originate %}
+    default-originate
+    {% endif %}

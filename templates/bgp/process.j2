@@ -1,0 +1,5 @@
+!
+router bgp {{ bgp_asn }}
+  {% if bgp_router_id %}
+  bgp router-id {{ bgp_router_id }}
+  {% endif %}

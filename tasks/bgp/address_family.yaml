@@ -1,0 +1,10 @@
+---
+- name: "generate fragment for bgp address-family"
+  when:
+    - bgp_address_family_afi
+    - bgp_address_family_safi
+  blockinfile:
+    create: "true"
+    content: "{{ lookup('template', 'address_family.j2') }}"
+    dest: "{{ bgp_config_fragments_path }}/address_family.cfg"
+  notify: "bgp_assemble_fragments"
